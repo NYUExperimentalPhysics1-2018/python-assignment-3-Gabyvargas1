@@ -44,7 +44,22 @@ def trajectory (x0,y0,v,theta,g = 9.8, npts = 1000):
     0.5g t^2 - vsin(theta) t - y0 = 0
     t_final = v/g sin(theta) + sqrt((v/g)^2 sin^2(theta) + 2 y0/g)
     """
-  
+    v_y= v* np.sin((np.deg2rad(theta)))
+    v_x= v* np.cos((np.deg2rad(theta)))
+    
+    t_final= (v_y/g) + np.sqrt((v_y/g)**2 + 2.*y0/g)
+    
+    time = np.linspace(0,t_final,npts)
+    
+    x= x0+ v_x*time
+    y= y0 + v_y*time - (0.5*g * time**2)
+    #print (x,y)
+    #print (y)
+    return x,y
+
+    
+
+    
 
 def firstInBox (x,y,box):
     """
@@ -65,8 +80,13 @@ def firstInBox (x,y,box):
         y[j] is in [bottom,top]
         -1 if the line x,y does not go through the box
     """
+    for j in range (len(x)):
+        if box[0]<x[j]<box[1]:
+            return True
+        if box[2]<y[j]<box[3]:
+            return True
 
-
+    
     
 
 def tankShot (targetBox, obstacleBox, x0, y0, v, theta, g = 9.8):
@@ -114,8 +134,17 @@ def drawBoard (tank1box, tank2box, obstacleBox, playerNum):
         1 or 2 -- who's turn it is to shoot
  
     """    
-    #your code here
+  
     
+ 
+    
+    
+    #your code here
+    plt.xlim(100)
+    plt.ylim(100)
+    drawBox(tank1box, 'r')
+    drawBox(tank2box, 'g')
+    drawBox(obstacleBox, 'b')
     showWindow() #this makes the figure window show up
 
 def oneTurn (tank1box, tank2box, obstacleBox, playerNum, g = 9.8):   
@@ -245,10 +274,25 @@ def endTrajectoryAtIntersection (x,y,box):
 
 ##### fmain -- edit box locations for new games #####
 def main():
+    
     tank1box = [10,15,0,5]
     tank2box = [90,95,0,5]
     obstacleBox = [40,60,0,50]
+    drawBoard (tank1box, tank2box, obstacleBox, 1)
     playGame(tank1box, tank2box, obstacleBox)
+    #firstInBox(1,2,tank1box)
+    
+    
+    x,y=trajectory(0,0,10,30)
+    plt.plot(x,y)
+    plt.show()
+    
+    
+    
+    
+    
+    
+    
     
 
 #don't edit the lines below;
